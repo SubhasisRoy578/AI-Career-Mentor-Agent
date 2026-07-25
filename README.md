@@ -1,10 +1,18 @@
 # AI Career Mentor Agent
 
+ codex/set-up-project-structure-for-ai-career-mentor-agent-7da4ey
 A production-ready monorepo for an AI SaaS career platform. The application currently includes a polished SaaS frontend, secure authentication, user profile management, and a lightweight NestJS API designed for Render and PostgreSQL.
 
 ## Current Phase
 
 Phase 3 upgrades the product experience with premium UI/UX, responsive navigation, profile-focused dashboard content, reusable interface components, settings polish, loading states, empty states, and toast notifications. AI career analysis, resume review, skill-gap analysis, AI chat, roadmaps, interview prep, and admin features remain intentionally out of scope.
+=======
+A production-ready monorepo foundation for an AI SaaS platform that helps users manage career profile data today and will later expand into AI career mentorship, resume tooling, chat, and personalized roadmaps.
+
+## Current Phase
+
+Phase 2 implements real authentication and user management while intentionally excluding AI career analysis, resume review, skill-gap analysis, AI chat, roadmaps, interview prep, and admin features.
+ main
 
 ## Folder Structure
 
@@ -58,6 +66,7 @@ The API runs on `http://localhost:4000` and Swagger is available at `/docs`.
 - `PATCH /users/me` — update the logged-in user profile
 - `POST /users/change-password` — change the logged-in user password
 
+ codex/set-up-project-structure-for-ai-career-mentor-agent-7da4ey
 ## Phase 3 UI Highlights
 
 - Responsive dashboard shell with desktop sidebar and mobile navigation
@@ -66,6 +75,8 @@ The API runs on `http://localhost:4000` and Swagger is available at `/docs`.
 - Settings tabs for profile, password, theme preference, notifications, and danger zone
 - Reusable UI primitives for buttons, cards, inputs, badges, avatars, dropdowns, dialogs, tabs, alerts, toasts, spinners, skeletons, and empty states
 
+=======
+main
 ## Environment Variables
 
 Frontend variables are documented in `frontend/.env.example`. Backend variables, including `DATABASE_URL`, JWT settings, and CORS origin, are documented in `backend/.env.example`.
