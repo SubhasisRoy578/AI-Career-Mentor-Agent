@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  PROFESSIONAL
+}
+
+model User {
+  id              String          @id @default(uuid())
+  fullName        String
+  email           String          @unique
+  password        String
+  education       String?
+  university      String?
+  currentSkills   String?
+  careerGoal      String?
+  experienceLevel ExperienceLevel @default(BEGINNER)
+  profileImage    String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([email])
+}

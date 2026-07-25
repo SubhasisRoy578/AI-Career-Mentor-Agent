@@ -1,0 +1,3 @@
+import { BarChart3, Compass, FileText, MessageSquare, Settings } from 'lucide-react';
+const items = [{icon:BarChart3,label:'Overview'},{icon:Compass,label:'Roadmap'},{icon:FileText,label:'Resume'},{icon:MessageSquare,label:'Mentor Chat'},{icon:Settings,label:'Settings'}];
+export function Sidebar(){return <aside className="hidden min-h-screen w-72 border-r border-white/10 bg-slate-950/80 p-6 lg:block"><div className="mb-10 text-xl font-bold">AI Career Mentor</div><nav className="space-y-2">{items.map(({icon:Icon,label})=><a className="flex items-center gap-3 rounded-2xl px-4 py-3 text-slate-300 hover:bg-white/10 hover:text-white" href="#" key={label}><Icon size={18}/>{label}</a>)}</nav></aside>}

@@ -1,0 +1,1 @@
+export default function Loading(){return <div className="grid min-h-screen place-items-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-white/20 border-t-brand-500" /></div>}
