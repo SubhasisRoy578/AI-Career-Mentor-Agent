@@ -31,9 +31,12 @@ model User {
   careerAnalyses  CareerAnalysis[]
   skillGapAnalyses SkillGapAnalysis[]
   learningRoadmaps LearningRoadmap[]
+ codex/clone-and-analyze-existing-github-repository-1j9xth
   resumes        Resume[]
   resumeAnalyses ResumeAnalysis[]
   resumeHistory  ResumeHistory[]
+=======
+main
 
   @@index([email])
 }
@@ -101,6 +104,7 @@ model LearningRoadmap {
 
   @@index([userId, createdAt])
 }
+codex/clone-and-analyze-existing-github-repository-1j9xth
 
 
 model Resume {
@@ -148,3 +152,5 @@ model ResumeHistory {
   @@index([userId, createdAt])
   @@index([resumeId, createdAt])
 }
+=======
+main
