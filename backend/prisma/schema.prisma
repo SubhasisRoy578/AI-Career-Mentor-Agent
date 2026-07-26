@@ -31,6 +31,12 @@ model User {
   careerAnalyses  CareerAnalysis[]
   skillGapAnalyses SkillGapAnalysis[]
   learningRoadmaps LearningRoadmap[]
+ codex/clone-and-analyze-existing-github-repository-1j9xth
+  resumes        Resume[]
+  resumeAnalyses ResumeAnalysis[]
+  resumeHistory  ResumeHistory[]
+=======
+main
 
   @@index([email])
 }
@@ -98,3 +104,53 @@ model LearningRoadmap {
 
   @@index([userId, createdAt])
 }
+codex/clone-and-analyze-existing-github-repository-1j9xth
+
+
+model Resume {
+  id               String           @id @default(uuid())
+  userId           String
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  originalName     String
+  mimeType         String
+  size             Int
+  storageKey       String
+  parsedText       String
+  parsedData       Json
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  analyses         ResumeAnalysis[]
+  history          ResumeHistory[]
+
+  @@index([userId, createdAt])
+}
+
+model ResumeAnalysis {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeId  String
+  resume    Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  result    Json
+  score     Int
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([resumeId, createdAt])
+}
+
+model ResumeHistory {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeId  String
+  resume    Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  action    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([resumeId, createdAt])
+}
+=======
+main

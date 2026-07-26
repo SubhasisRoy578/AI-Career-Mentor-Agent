@@ -4,7 +4,11 @@ A production-ready monorepo for an AI SaaS career platform. The application curr
 
 ## Current Phase
 
+codex/clone-and-analyze-existing-github-repository-1j9xth
+Phase 5 adds Resume Upload and AI ATS Resume Analysis on top of the Phase 4 AI Career Analysis Engine. The app now supports structured career assessments, AI career reports, skill-gap analysis, learning roadmaps, resume parsing, ATS scoring, and saved resume report history while keeping AI chat, mock interviews, marketplace, and admin features intentionally out of scope.
+=======
 Phase 4 adds the AI Career Analysis Engine on top of the Phase 3 SaaS experience. The app now supports structured career assessments, AI career reports, skill-gap analysis, learning roadmap generation, and saved report history while keeping resume ATS analysis, uploads, AI chat, mock interviews, and admin features intentionally out of scope.
+main
 
 ## Folder Structure
 
@@ -63,6 +67,14 @@ The API runs on `http://localhost:4000` and Swagger is available at `/docs`.
 - `POST /ai/skill-gap` — generate and save a target-role skill-gap analysis
 - `POST /ai/roadmap` — generate and save a personalized learning roadmap
 - `GET /ai/reports` — retrieve saved AI report history
+codex/clone-and-analyze-existing-github-repository-1j9xth
+- `POST /resumes` — upload, validate, parse, and persist a PDF/DOCX resume
+- `GET /resumes` and `GET /resumes/:id` — list and view owned resumes
+- `DELETE /resumes/:id` — delete an owned resume
+- `POST /resumes/:id/analyze` and `POST /resumes/:id/regenerate` — generate or regenerate AI ATS analysis
+- `GET /resumes/reports` and `GET /resumes/:id/reports` — retrieve previous ATS reports
+=======
+main
 
 ## Phase 3 UI Highlights
 
@@ -80,6 +92,16 @@ The API runs on `http://localhost:4000` and Swagger is available at `/docs`.
 - Learning Roadmap page supporting 30-day, 60-day, 90-day, and 6-month plans with weekly goals, practice, mini projects, and milestones
 - Provider abstraction configured with `AI_PROVIDER`, `AI_API_KEY`, `AI_MODEL`, and optional `AI_BASE_URL` for OpenAI-compatible APIs or Gemini
 
+codex/clone-and-analyze-existing-github-repository-1j9xth
+## Phase 5 Resume Highlights
+
+- Resume Upload page with drag-and-drop PDF/DOCX validation, upload progress, toast messages, and safe authenticated submission
+- Resume History page for uploaded resumes and previous ATS reports
+- Resume Details page showing extracted contact, education, skills, experience, projects, certifications, languages, links, and summary
+- ATS Analysis Report page with score indicator, progress bar, expandable recommendation sections, improvement checklist, regeneration, and download-view UI
+- Backend resume storage abstraction, parser, repository, validation, ownership checks, and AI ATS prompt flow
+
+main
 ## Environment Variables
 
 Frontend variables are documented in `frontend/.env.example`. Backend variables, including `DATABASE_URL`, JWT settings, and CORS origin, are documented in `backend/.env.example`.
@@ -87,6 +109,12 @@ Frontend variables are documented in `frontend/.env.example`. Backend variables,
 ## Future Development Phases
 
 1. Add password reset email delivery and refresh-token/session hardening.
+ codex/clone-and-analyze-existing-github-repository-1j9xth
+2. Add AI mentor chat orchestration.
+3. Add interview preparation and mock interview modules.
+4. Add marketplace, billing, observability, rate limiting, and production CI/CD.
+
 2. Add resume upload and ATS analysis workflows.
 3. Add AI mentor chat orchestration and interview preparation modules.
 4. Add billing, observability, rate limiting, and production CI/CD.
+ main
