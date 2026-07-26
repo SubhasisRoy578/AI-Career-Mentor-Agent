@@ -15,11 +15,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
- codex/set-up-project-structure-for-ai-career-mentor-agent-7da4ey
         secret: config.get<string>('JWT_SECRET') ?? 'development-only-change-me',
-=======
-        secret: config.get<string>('JWT_SECRET'),
- main
         signOptions: { expiresIn: config.get<string>('JWT_EXPIRES_IN', '15m') },
       }),
     }),

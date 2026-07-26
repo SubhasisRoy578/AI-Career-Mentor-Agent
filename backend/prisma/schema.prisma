@@ -27,6 +27,124 @@ model User {
   profileImage    String?
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+  careerProfile   CareerProfile?
+  careerAnalyses  CareerAnalysis[]
+  skillGapAnalyses SkillGapAnalysis[]
+  learningRoadmaps LearningRoadmap[]
+  resumes        Resume[]
+  resumeAnalyses ResumeAnalysis[]
+  resumeHistory  ResumeHistory[]
 
   @@index([email])
+}
+
+
+model CareerProfile {
+  id                    String          @id @default(uuid())
+  userId                String          @unique
+  user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currentEducation      String
+  degree                String
+  university            String
+  yearOfStudy           String
+  currentSkills         String[]
+  preferredTechnologies String[]
+  careerGoal            String
+  preferredIndustry     String
+  experienceLevel       ExperienceLevel
+  certifications        String[]        @default([])
+  projects              String[]        @default([])
+  interests             String[]        @default([])
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  careerAnalyses        CareerAnalysis[]
+  skillGapAnalyses      SkillGapAnalysis[]
+  learningRoadmaps      LearningRoadmap[]
+}
+
+model CareerAnalysis {
+  id        String        @id @default(uuid())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profileId String
+  profile   CareerProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  summary   String
+  result    Json
+  createdAt DateTime      @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model SkillGapAnalysis {
+  id           String        @id @default(uuid())
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profileId    String
+  profile      CareerProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  targetCareer String
+  result       Json
+  createdAt    DateTime      @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model LearningRoadmap {
+  id           String        @id @default(uuid())
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profileId    String
+  profile      CareerProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  targetCareer String
+  duration     String
+  result       Json
+  createdAt    DateTime      @default(now())
+
+  @@index([userId, createdAt])
+}
+
+
+model Resume {
+  id               String           @id @default(uuid())
+  userId           String
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  originalName     String
+  mimeType         String
+  size             Int
+  storageKey       String
+  parsedText       String
+  parsedData       Json
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  analyses         ResumeAnalysis[]
+  history          ResumeHistory[]
+
+  @@index([userId, createdAt])
+}
+
+model ResumeAnalysis {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeId  String
+  resume    Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  result    Json
+  score     Int
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([resumeId, createdAt])
+}
+
+model ResumeHistory {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeId  String
+  resume    Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  action    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([resumeId, createdAt])
 }

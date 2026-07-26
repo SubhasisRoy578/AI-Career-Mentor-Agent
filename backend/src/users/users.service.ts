@@ -46,7 +46,8 @@ export class UsersService {
   }
 
   toPublicUser<T extends { password: string }>(user: T) {
-    const { password: _password, ...safeUser } = user;
+    const { password, ...safeUser } = user;
+    void password;
     return safeUser;
   }
 }

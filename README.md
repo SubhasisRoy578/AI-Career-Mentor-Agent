@@ -1,18 +1,10 @@
 # AI Career Mentor Agent
 
- codex/set-up-project-structure-for-ai-career-mentor-agent-7da4ey
 A production-ready monorepo for an AI SaaS career platform. The application currently includes a polished SaaS frontend, secure authentication, user profile management, and a lightweight NestJS API designed for Render and PostgreSQL.
 
 ## Current Phase
 
-Phase 3 upgrades the product experience with premium UI/UX, responsive navigation, profile-focused dashboard content, reusable interface components, settings polish, loading states, empty states, and toast notifications. AI career analysis, resume review, skill-gap analysis, AI chat, roadmaps, interview prep, and admin features remain intentionally out of scope.
-=======
-A production-ready monorepo foundation for an AI SaaS platform that helps users manage career profile data today and will later expand into AI career mentorship, resume tooling, chat, and personalized roadmaps.
-
-## Current Phase
-
-Phase 2 implements real authentication and user management while intentionally excluding AI career analysis, resume review, skill-gap analysis, AI chat, roadmaps, interview prep, and admin features.
- main
+Phase 5 adds Resume Upload and AI ATS Resume Analysis on top of the Phase 4 AI Career Analysis Engine. The app now supports structured career assessments, AI career reports, skill-gap analysis, learning roadmaps, resume parsing, ATS scoring, and saved resume report history while keeping AI chat, mock interviews, marketplace, and admin features intentionally out of scope.
 
 ## Folder Structure
 
@@ -65,8 +57,18 @@ The API runs on `http://localhost:4000` and Swagger is available at `/docs`.
 - `GET /users/me` — retrieve the logged-in user profile
 - `PATCH /users/me` — update the logged-in user profile
 - `POST /users/change-password` — change the logged-in user password
+- `GET /ai/career-profile` and `POST /ai/career-profile` — retrieve and save the AI career assessment profile
+- `POST /ai/career-analysis` — generate and save a structured AI career report
+- `GET /ai/career-analysis/latest` — retrieve the most recent career report
+- `POST /ai/skill-gap` — generate and save a target-role skill-gap analysis
+- `POST /ai/roadmap` — generate and save a personalized learning roadmap
+- `GET /ai/reports` — retrieve saved AI report history
+- `POST /resumes` — upload, validate, parse, and persist a PDF/DOCX resume
+- `GET /resumes` and `GET /resumes/:id` — list and view owned resumes
+- `DELETE /resumes/:id` — delete an owned resume
+- `POST /resumes/:id/analyze` and `POST /resumes/:id/regenerate` — generate or regenerate AI ATS analysis
+- `GET /resumes/reports` and `GET /resumes/:id/reports` — retrieve previous ATS reports
 
- codex/set-up-project-structure-for-ai-career-mentor-agent-7da4ey
 ## Phase 3 UI Highlights
 
 - Responsive dashboard shell with desktop sidebar and mobile navigation
@@ -75,8 +77,22 @@ The API runs on `http://localhost:4000` and Swagger is available at `/docs`.
 - Settings tabs for profile, password, theme preference, notifications, and danger zone
 - Reusable UI primitives for buttons, cards, inputs, badges, avatars, dropdowns, dialogs, tabs, alerts, toasts, spinners, skeletons, and empty states
 
-=======
-main
+## Phase 4 AI Highlights
+
+- Career Assessment page for education, degree, university, study year, skills, preferred technologies, goal, industry, certifications, projects, and interests
+- AI Career Report page with saved reports, regeneration, strengths, weaknesses, recommendations, projects, internships, open source, and portfolio guidance
+- Skill Gap Analysis page comparing current skills with a target career and returning prioritized missing skills with levels, time estimates, and resources
+- Learning Roadmap page supporting 30-day, 60-day, 90-day, and 6-month plans with weekly goals, practice, mini projects, and milestones
+- Provider abstraction configured with `AI_PROVIDER`, `AI_API_KEY`, `AI_MODEL`, and optional `AI_BASE_URL` for OpenAI-compatible APIs or Gemini
+
+## Phase 5 Resume Highlights
+
+- Resume Upload page with drag-and-drop PDF/DOCX validation, upload progress, toast messages, and safe authenticated submission
+- Resume History page for uploaded resumes and previous ATS reports
+- Resume Details page showing extracted contact, education, skills, experience, projects, certifications, languages, links, and summary
+- ATS Analysis Report page with score indicator, progress bar, expandable recommendation sections, improvement checklist, regeneration, and download-view UI
+- Backend resume storage abstraction, parser, repository, validation, ownership checks, and AI ATS prompt flow
+
 ## Environment Variables
 
 Frontend variables are documented in `frontend/.env.example`. Backend variables, including `DATABASE_URL`, JWT settings, and CORS origin, are documented in `backend/.env.example`.
@@ -84,6 +100,6 @@ Frontend variables are documented in `frontend/.env.example`. Backend variables,
 ## Future Development Phases
 
 1. Add password reset email delivery and refresh-token/session hardening.
-2. Add career profile workflows and resume upload APIs.
-3. Integrate AI provider adapters and chat orchestration.
-4. Add billing, observability, rate limiting, and production CI/CD.
+2. Add AI mentor chat orchestration.
+3. Add interview preparation and mock interview modules.
+4. Add marketplace, billing, observability, rate limiting, and production CI/CD.
