@@ -14,38 +14,98 @@ enum ExperienceLevel {
   PROFESSIONAL
 }
 
+enum ConversationRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum InterviewType {
+  TECHNICAL
+  HR
+  BEHAVIORAL
+  RESUME
+  CAREER
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum JobStatus {
+  SAVED
+  APPLIED
+  INTERVIEW
+  OFFER
+  REJECTED
+  WITHDRAWN
+}
+
+enum GoalStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  PAUSED
+}
+
+enum NotificationType {
+  GOAL_REMINDER
+  INTERVIEW_REMINDER
+  RESUME_REMINDER
+  CAREER_ANALYSIS_REMINDER
+  SYSTEM
+}
+
+enum ExportType {
+  CAREER_REPORT
+  ATS_REPORT
+  LEARNING_ROADMAP
+  INTERVIEW_REPORT
+  JOB_TRACKER_SUMMARY
+}
+
+enum ExportFormat {
+  PDF
+  JSON
+}
+
 model User {
-  id              String          @id @default(uuid())
-  fullName        String
-  email           String          @unique
-  password        String
-  education       String?
-  university      String?
-  currentSkills   String?
-  careerGoal      String?
-  experienceLevel ExperienceLevel @default(BEGINNER)
-  profileImage    String?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  careerProfile   CareerProfile?
-  careerAnalyses  CareerAnalysis[]
-  skillGapAnalyses SkillGapAnalysis[]
-  learningRoadmaps LearningRoadmap[]
- codex/clone-and-analyze-existing-github-repository-1j9xth
-  resumes        Resume[]
-  resumeAnalyses ResumeAnalysis[]
-  resumeHistory  ResumeHistory[]
-=======
-main
+  id                 String              @id @default(uuid())
+  fullName           String
+  email              String              @unique
+  password           String
+  education          String?
+  university         String?
+  currentSkills      String?
+  careerGoal         String?
+  experienceLevel    ExperienceLevel     @default(BEGINNER)
+  profileImage       String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  careerProfile      CareerProfile?
+  careerAnalyses     CareerAnalysis[]
+  skillGapAnalyses   SkillGapAnalysis[]
+  learningRoadmaps   LearningRoadmap[]
+  resumes            Resume[]
+  resumeAnalyses     ResumeAnalysis[]
+  resumeHistory      ResumeHistory[]
+  conversations      Conversation[]
+  interviewSessions  InterviewSession[]
+  jobApplications    JobApplication[]
+  goals              Goal[]
+  notifications      Notification[]
+  analyticsSnapshots AnalyticsSnapshot[]
+  exportHistory      ExportHistory[]
 
   @@index([email])
 }
 
-
 model CareerProfile {
-  id                    String          @id @default(uuid())
-  userId                String          @unique
-  user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                    String             @id @default(uuid())
+  userId                String             @unique
+  user                  User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   currentEducation      String
   degree                String
   university            String
@@ -55,11 +115,11 @@ model CareerProfile {
   careerGoal            String
   preferredIndustry     String
   experienceLevel       ExperienceLevel
-  certifications        String[]        @default([])
-  projects              String[]        @default([])
-  interests             String[]        @default([])
-  createdAt             DateTime        @default(now())
-  updatedAt             DateTime        @updatedAt
+  certifications        String[]           @default([])
+  projects              String[]           @default([])
+  interests             String[]           @default([])
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
   careerAnalyses        CareerAnalysis[]
   skillGapAnalyses      SkillGapAnalysis[]
   learningRoadmaps      LearningRoadmap[]
@@ -104,23 +164,21 @@ model LearningRoadmap {
 
   @@index([userId, createdAt])
 }
-codex/clone-and-analyze-existing-github-repository-1j9xth
-
 
 model Resume {
-  id               String           @id @default(uuid())
-  userId           String
-  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  originalName     String
-  mimeType         String
-  size             Int
-  storageKey       String
-  parsedText       String
-  parsedData       Json
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  analyses         ResumeAnalysis[]
-  history          ResumeHistory[]
+  id           String           @id @default(uuid())
+  userId       String
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  originalName String
+  mimeType     String
+  size         Int
+  storageKey   String
+  parsedText   String
+  parsedData   Json
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  analyses     ResumeAnalysis[]
+  history      ResumeHistory[]
 
   @@index([userId, createdAt])
 }
@@ -152,5 +210,169 @@ model ResumeHistory {
   @@index([userId, createdAt])
   @@index([resumeId, createdAt])
 }
-=======
-main
+
+model Conversation {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+
+  @@index([userId, updatedAt])
+}
+
+model Message {
+  id             String           @id @default(uuid())
+  conversationId String
+  conversation   Conversation     @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           ConversationRole
+  content        String
+  metadata       Json?
+  createdAt      DateTime         @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+model InterviewSession {
+  id               String              @id @default(uuid())
+  userId           String
+  user             User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type             InterviewType
+  difficulty       Difficulty
+  targetRole       String?
+  status           String              @default("COMPLETED")
+  summary          String?
+  performanceScore Int?
+  confidenceScore  Int?
+  feedback         Json?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  questions        InterviewQuestion[]
+  feedbackItems    InterviewFeedback[]
+
+  @@index([userId, createdAt])
+}
+
+model InterviewQuestion {
+  id             String            @id @default(uuid())
+  sessionId      String?
+  session        InterviewSession? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  type           InterviewType
+  difficulty     Difficulty
+  question       String
+  expectedAnswer String?
+  tags           String[]          @default([])
+  createdAt      DateTime          @default(now())
+
+  @@index([sessionId])
+}
+
+model InterviewFeedback {
+  id              String           @id @default(uuid())
+  sessionId       String
+  session         InterviewSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  question        String?
+  answer          String?
+  feedback        String
+  suggestions     String[]         @default([])
+  score           Int
+  confidenceScore Int
+  createdAt       DateTime         @default(now())
+}
+
+model JobApplication {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company   String
+  role      String
+  location  String?
+  source    String?
+  status    JobStatus @default(SAVED)
+  appliedAt DateTime?
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId, status])
+}
+
+model CareerResource {
+  id           String   @id @default(uuid())
+  title        String
+  type         String
+  url          String?
+  provider     String?
+  description  String?
+  targetCareer String?
+  tags         String[] @default([])
+  createdAt    DateTime @default(now())
+
+  @@index([type])
+}
+
+model Goal {
+  id          String          @id @default(uuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  status      GoalStatus      @default(NOT_STARTED)
+  deadline    DateTime?
+  progress    Int             @default(0)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  milestones  GoalMilestone[]
+
+  @@index([userId, status])
+}
+
+model GoalMilestone {
+  id        String    @id @default(uuid())
+  goalId    String
+  goal      Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  title     String
+  completed Boolean   @default(false)
+  dueDate   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  body      String
+  read      Boolean          @default(false)
+  dueAt     DateTime?
+  createdAt DateTime         @default(now())
+
+  @@index([userId, read])
+}
+
+model AnalyticsSnapshot {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  metrics   Json
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model ExportHistory {
+  id        String       @id @default(uuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      ExportType
+  format    ExportFormat
+  fileName  String?
+  payload   Json?
+  createdAt DateTime     @default(now())
+
+  @@index([userId, createdAt])
+}

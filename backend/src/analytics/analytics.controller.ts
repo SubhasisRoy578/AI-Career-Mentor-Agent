@@ -1,0 +1,8 @@
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { apiResponse } from '../common/api-response';
+import { PrismaService } from '../common/prisma.service';
+import { AuthenticatedRequest } from '../common/types/authenticated-request';
+@ApiTags('Progress Analytics') @ApiBearerAuth() @UseGuards(JwtAuthGuard) @Controller('analytics')
+export class AnalyticsController{constructor(private prisma:PrismaService){} @Get('dashboard') async dashboard(@Req()r:AuthenticatedRequest){const userId=r.user.sub;const [user,profile,resumes,ats,roadmaps,goals,interviews,jobs]=await Promise.all([this.prisma.user.findUnique({where:{id:userId}}),this.prisma.careerProfile.findUnique({where:{userId}}),this.prisma.resume.count({where:{userId}}),this.prisma.resumeAnalysis.findFirst({where:{userId},orderBy:{createdAt:'desc'}}),this.prisma.learningRoadmap.count({where:{userId}}),this.prisma.goal.findMany({where:{userId}}),this.prisma.interviewSession.count({where:{userId}}),this.prisma.jobApplication.count({where:{userId}})]);const profileFields=[user?.education,user?.university,user?.currentSkills,user?.careerGoal,profile].filter(Boolean).length;const metrics={profileCompletion:Math.round((profileFields/5)*100),resumeCompletion:resumes>0?100:0,atsImprovement:ats?.score ?? 0,skillProgress:goals.length?Math.round(goals.reduce((s,g)=>s+g.progress,0)/goals.length):0,roadmapCompletion:roadmaps>0?100:0,goals:{total:goals.length,completed:goals.filter(g=>g.status==='COMPLETED').length},interviewHistory:interviews,jobApplications:jobs};return apiResponse('Analytics generated from user data.',metrics)}}
